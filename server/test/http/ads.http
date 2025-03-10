@@ -1,0 +1,29 @@
+POST http://localhost:3315/api/user
+Content-Type: application/json
+
+{
+  "firstname": "Zey",
+  "lastname": "Ngouenengue",
+  "email": "zey.ngouenengue@example.com",
+  "password": "mypassword790",
+  "birth_day": "2000-08-11"
+}
+
+###
+GET http://localhost:3310/api/annonces/11
+
+###
+PUT http://localhost:3315/api/user/update/4
+Content-Type: application/json
+
+{
+  "firstname": "BAH",
+  "lastname": "Aly",
+  "email": "aly.224@example.com",
+  "password": "mypassword791",
+  "birth_day": "2025-05-11"
+}
+
+###
+DELETE http://localhost:3315/api/user/delete/2
+Content-Type: application/json
