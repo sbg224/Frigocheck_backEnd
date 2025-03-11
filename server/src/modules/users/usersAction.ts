@@ -15,6 +15,16 @@ const add: RequestHandler = async (req, res) => {
 			return;
 		}
 
+    console.log("🔍 Vérification de l'existence de l'utilisateur...");
+		const userExit = await usersRepositorie.findEmail(email);
+    console.log("Résultat de findEmail :", userExit);
+		if (userExit) {
+			res
+				.status(409)
+				.json({ error: "Un utilisateur avec cet email existe déjà." });
+        return;
+		}
+
 		const hachPassword = bcrypt.hashSync(password, 10);
 
 		const newUser: thingsUsers = {
@@ -89,7 +99,7 @@ const Destroy: RequestHandler = async (req, res) => {
 	const userId = req.params.id;
 	// Vérifier que l'ID est valide
 	if (!userId || Number.isNaN(Number(userId))) {
-    console.error(`❌ Erreur : ID utilisateur invalide : ${userId}`);
+		console.error(`❌ Erreur : ID utilisateur invalide : ${userId}`);
 		res.status(400).json({ error: "ID utilisateur invalide" });
 		return;
 	}
@@ -99,13 +109,13 @@ const Destroy: RequestHandler = async (req, res) => {
 
 		// Si aucune ligne n'a été affectée, cela signifie que l'utilisateur n'a pas été trouvé
 		if (deleteUser === 0) {
-      console.warn(`⚠️ Aucun utilisateur trouvé avec l'ID : ${userId}`);
+			console.warn(`⚠️ Aucun utilisateur trouvé avec l'ID : ${userId}`);
 			res.status(404).json({ error: "Utilisateur non trouvé" });
 			return;
 		}
 
 		// Si la suppression a réussi
-    console.log(`✅ Utilisateur avec l'ID : ${userId} supprimé avec succès`);
+		console.log(`✅ Utilisateur avec l'ID : ${userId} supprimé avec succès`);
 		res.status(200).json({ message: "Utilisateur supprimé avec succès" });
 		return;
 	} catch (error) {

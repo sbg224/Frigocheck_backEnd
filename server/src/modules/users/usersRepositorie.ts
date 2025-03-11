@@ -2,8 +2,28 @@ import pool from "database/bdd";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { type thingsUsers, thingsProduct, thingsOrder } from "../../things";
 
-
 class usersRepositorie {
+	async findEmail(email: string) {
+		//je verifie si l'utilisateur existe deja
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+					"SELECT id, firstname, lastname, email, birth_day FROM `user` WHERE email = ? LIMIT 1",
+					[email],
+				);
+        console.log("Résultat de la recherche :", rows);
+
+			if (rows.length > 0) {
+        return rows[0] as thingsUsers;
+				// throw new Error("Un utilisateur avec cet email existe déjà.");
+			}
+      return null;
+		} catch (error) {
+
+    }
+	}
+
 	// Ajout d'un utilisateur
 	async create(user: thingsUsers): Promise<number> {
 		try {
@@ -51,46 +71,51 @@ class usersRepositorie {
 
 	async update(user_id: string, user: Partial<thingsUsers>): Promise<number> {
 		try {
-      console.log("🔍 Début de la mise à jour SQL pour l'utilisateur :", user_id);
+			console.log(
+				"🔍 Début de la mise à jour SQL pour l'utilisateur :",
+				user_id,
+			);
 			const [rows] = await pool
 				.promise()
 				.query<ResultSetHeader>(
 					"UPDATE `user` SET firstname = ?, lastname = ?, email = ?, password = ?, birth_day = ? WHERE id = ?",
 					[
-            user.firstname,
-            user.lastname,
-            user.email,
-            user.password,
-            user.birth_day,
-            user_id, // Assurez-vous de passer l'id pour identifier quel utilisateur mettre à jour
-          ]
+						user.firstname,
+						user.lastname,
+						user.email,
+						user.password,
+						user.birth_day,
+						user_id, // Assurez-vous de passer l'id pour identifier quel utilisateur mettre à jour
+					],
 				);
-        console.log("📌 Résultat SQL :", rows);
-        
-        // Vérification si la mise à jour a bien eu lieu
-        if (rows.affectedRows === 0) {
-          throw new Error("Aucun utilisateur trouvé avec cet ID, ou aucune modification effectuée.");
-        }
-    
-        // Retourner le nombre de lignes affectées
-        return rows.affectedRows;
-      } catch (error) {
-        console.error("Erreur lors de la mise à jour de l'utilisateur :", error);
-        throw error;
-      }
+			console.log("📌 Résultat SQL :", rows);
+
+			// Vérification si la mise à jour a bien eu lieu
+			if (rows.affectedRows === 0) {
+				throw new Error(
+					"Aucun utilisateur trouvé avec cet ID, ou aucune modification effectuée.",
+				);
+			}
+
+			// Retourner le nombre de lignes affectées
+			return rows.affectedRows;
+		} catch (error) {
+			console.error("Erreur lors de la mise à jour de l'utilisateur :", error);
+			throw error;
+		}
 	}
 
 	async delete(user_id: string): Promise<number> {
-    try {
-      const [rows] = await pool.promise().query<ResultSetHeader>(
-        "DELETE from `user` WHERE id = ?", [user_id]
-      );
-      return rows.affectedRows;
-    } catch (error) {
-      console.error("Erreur lors de la suppression de l'utilisateur :", error);
-    throw error;
-    }
-  }
+		try {
+			const [rows] = await pool
+				.promise()
+				.query<ResultSetHeader>("DELETE from `user` WHERE id = ?", [user_id]);
+			return rows.affectedRows;
+		} catch (error) {
+			console.error("Erreur lors de la suppression de l'utilisateur :", error);
+			throw error;
+		}
+	}
 }
 
 export default new usersRepositorie();

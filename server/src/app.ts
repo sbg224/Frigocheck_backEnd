@@ -26,5 +26,5 @@ const port = process.env.PORT || 3000;
 
 // Démarrer le serveur
 app.listen(port, () => {
-	console.log(`Serveur démarré sur le port ${port}`);
+	console.log(`Serveur démarré sur le port http//localhost:${port}`);
 });
