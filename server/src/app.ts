@@ -2,8 +2,11 @@ import connection from "../database/bdd";
 import router from "./routes";
 import express from "express";
 import cors from "cors";
+import { loger } from "./midelware/loger";
 
 const app = express();
+
+app.use(loger);
 // Middleware pour CORS
 app.use(cors());
 
