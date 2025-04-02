@@ -22,11 +22,13 @@ router.post("/api/ajout/produit", produitsAction.addProduit)
 //modifier un produit
 router.put("/api/modifi/produit/:id", produitsAction.modifProduit)
 //supprimier un produit
-router.delete("/api/upprime/produit/:id", produitsAction.suppProduit)
+router.delete("/api/supprime/produit/:id", produitsAction.suppProduit)
 //recupérer un produit
 router.get("/api/produit/:id", produitsAction.readProduit)
 //recupérer tous les produits
 router.get("/api/produit", produitsAction.brows)
+//recupérer tous les types et genres
+router.get("/api/typegenre", produitsAction.readType)
 
 
 

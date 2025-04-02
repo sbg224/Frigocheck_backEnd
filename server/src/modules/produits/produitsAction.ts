@@ -9,6 +9,8 @@ import type { RequestHandler, NextFunction } from "express";
 //ajoputer un produit
 const addProduit: RequestHandler = async (req, res) => {
 	try {
+    console.log("📩 Requête reçue pour ajouter un produit !");
+		console.log("📝 Corps de la requête :", req.body);
 		const { designation, user_id, type_id, genre_id, quantite } = req.body;
 		console.info(req.body);
 
@@ -39,6 +41,12 @@ const addProduit: RequestHandler = async (req, res) => {
 			id: 0,
 		});
 
+    if (!produitsRepositorie) {
+      console.error("🛑 Erreur : Repository non initialisé.");
+      res.status(500).json({ error: "Problème avec la connexion à la base de données." });
+      return;
+  }
+
 		// ✅ Vérification si l'produit a bien été ajouté
 		if (!produitInsert) {
 			res.status(500).json({
@@ -50,7 +58,7 @@ const addProduit: RequestHandler = async (req, res) => {
 		console.log("✅ produit ajouté avec succès, ID :", produitInsert);
 		res.status(201).json({
 			message: "produit ajouté avec succès",
-			userId: produitInsert, // Retourne l'ID du nouvel produit
+			ProductId: produitInsert, // Retourne l'ID du nouvel produit
 		});
 	} catch (error) {
 		console.error("Erreur lors de l'ajout d'un produit :", error);
@@ -164,4 +172,21 @@ const brows: RequestHandler = async (req, res, next) => {
 	}
 };
 
-export default { addProduit, modifProduit,suppProduit, readProduit, brows };
+//recupérer tous les types et les genres
+const readType: RequestHandler = async (req, res, next) => {
+	try {
+		const typesAndGenres = await produitsRepositorie.readTypesAndGenres();
+		console.log(typesAndGenres);
+		
+		if (!typesAndGenres) {
+			res.status(404).json({ message: "produit non trouvé" });
+			return;
+		}
+
+		res.status(200).json({ message: typesAndGenres });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export default { addProduit, modifProduit,suppProduit, readProduit, brows, readType };

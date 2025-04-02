@@ -10,7 +10,7 @@ class produitsRepositorie {
 			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-					"SELECT id, designation, user_id, type_id, genre_id, quantite FROM produit WHERE email = ? LIMIT 1",
+					"SELECT id, designation, user_id, type_id, genre_id, quantite FROM produit WHERE designation = ? LIMIT 1",
 					[designation],
 				);
         console.log("Résultat de la recherche :", rows);
@@ -40,6 +40,11 @@ class produitsRepositorie {
 						product.quantite,
 					],
 				);
+
+        if (!pool) {
+          console.error("🛑 ERREUR: La connexion MySQL (pool) n'est pas initialisée !");
+          throw new Error("Problème de connexion à la base de données.");
+      }
 			// Vérification si l'insertion a réussi
 			if (rows.affectedRows === 0) {
 				throw new Error("Aucune ligne affectée lors de l'insertion.");
@@ -62,12 +67,12 @@ class produitsRepositorie {
 		product: Partial<thingsProduct>,
 	): Promise<number> {
 		try {
-			console.log("🔍 Début de la mise à jour SQL pour product :", product_id);
+			console.log("🔍 Début de la mise à jour SQL pour produit :", product_id);
 
 			const [rows] = await pool
 				.promise()
 				.query<ResultSetHeader>(
-					"UPDATE product SET designation = ?, user_id = ?, type_id =?, genre_id =?, quantite = ?",
+					"UPDATE produit SET designation = ?, user_id = ?, type_id =?, genre_id =?, quantite = ? WHERE id = ?",
 					[
 						product.designation,
 						product.user_id,
@@ -102,7 +107,7 @@ class produitsRepositorie {
 		try {
 			const [rows] = await pool
 				.promise()
-				.query<ResultSetHeader>("DELETE from product WHERE id = ?", [
+				.query<ResultSetHeader>("DELETE from produit WHERE id = ?", [
 					product_id,
 				]);
 			return rows.affectedRows;
@@ -126,7 +131,6 @@ class produitsRepositorie {
         console.log("Résultat :", rows);
         if (rows.length > 0) {
           return rows[0] as unknown as string;
-          // throw new Error("Un utilisateur avec cet email existe déjà.");
         }
         return null;
     } catch (error) {
@@ -144,13 +148,27 @@ class produitsRepositorie {
         console.log("Résultat :", rows);
         if (rows.length > 0) {
           return rows[0] as unknown as string;
-          // throw new Error("Un utilisateur avec cet email existe déjà.");
         }
         return null;
     } catch (error) {
       
     }
+  };
+
+  async readTypesAndGenres(){
+    try {
+      const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+          "SELECT t.id AS type_id, t.t_name AS type_name, g.id AS genre_id, g.g_name AS genre_name FROM `type` t CROSS JOIN genre g"
+        );
+        console.log("Résultat :", rows);
+        return rows.length > 0 ? rows : null;
+    } catch (error) {
+      
+    }
   }
 }
+
 
 export default new produitsRepositorie();

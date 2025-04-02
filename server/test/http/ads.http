@@ -2,36 +2,23 @@ POST http://localhost:3315/api/user
 Content-Type: application/json
 
 {
-  "firstname": "Flo",
-  "lastname": "Jack",
-  "email": "flowild@example.com",
-  "password": "mypassword795",
-  "birth_day": "2004-08-11"
+  "firstname": "Sow",
+  "lastname": "Aliou",
+  "email": "aliou@example.com",
+  "password": "mypassword797",
+  "birth_day": "2006-08-11"
 }
+
 ###
 PUT http://localhost:3315/api/user/update/4
 Content-Type: application/json
 
-###
-DELETE http://localhost:3315/api/user/delete/2
-Content-Type: application/json
-
-###
-POST http://localhost:3310/api/ajout/produit
-
-###
-GET http://localhost:3310/api/produit
-
-###
-GET http://localhost:3310/api/produit/1
-
-
 {
-  "firstname": "BAH",
-  "lastname": "Aly",
-  "email": "aly.224@example.com",
-  "password": "mypassword791",
-  "birth_day": "2025-05-11"
+  "firstname": "Sow",
+  "lastname": "Aliou",
+  "email": "aliou@example.com",
+  "password": "mypassword797",
+  "birth_day": "2006-08-11"
 }
 
 ###
@@ -39,3 +26,41 @@ DELETE http://localhost:3315/api/user/delete/2
 Content-Type: application/json
 
 
+//produit
+###
+POST http://localhost:3315/api/ajout/produit
+Content-Type: application/json
+
+{
+  "designation": "banane",
+  "user_id": "16",
+  "type_id": "6",
+  "genre_id": "5",
+  "quantite": "6"
+}
+
+###
+GET http://localhost:3315/api/produit
+
+###
+GET http://localhost:3315/api/produit/24
+
+###
+PUT http://localhost:3315/api/modifi/produit/26
+Content-Type: application/json
+
+{
+  "designation": "evian",
+  "user_id": "3",
+  "type_id": "6",
+  "genre_id": "5",
+  "quantite": "12"
+}
+
+###
+DELETE http://localhost:3315/api/supprime/produit/8
+Content-Type: application/json
+
+
+###
+GET http://localhost:3315/api/typegenre
