@@ -8,12 +8,12 @@ export interface thingsUsers {
 }
 
 export interface thingsProduct {
-	// id: number;
+	id: number;
 	designation: string;
 	user_id: number;
 	type_id: number;
 	genre_id: number;
-	quantité: number;
+	quantite: number;
 }
 
 export interface thingsOrder {
