@@ -1,31 +1,3 @@
-POST http://localhost:3315/api/user
-Content-Type: application/json
-
-{
-  "firstname": "Sow",
-  "lastname": "Aliou",
-  "email": "aliou@example.com",
-  "password": "mypassword797",
-  "birth_day": "2006-08-11"
-}
-
-###
-PUT http://localhost:3315/api/user/update/4
-Content-Type: application/json
-
-{
-  "firstname": "Sow",
-  "lastname": "Aliou",
-  "email": "aliou@example.com",
-  "password": "mypassword797",
-  "birth_day": "2006-08-11"
-}
-
-###
-DELETE http://localhost:3315/api/user/delete/2
-Content-Type: application/json
-
-
 //produit
 ###
 POST http://localhost:3315/api/ajout/produit
@@ -40,7 +12,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3315/api/produit
+GET http://localhost:3315/api/produits
 
 ###
 GET http://localhost:3315/api/produit/24
@@ -64,3 +36,30 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3315/api/typegenre
+
+###
+
+
+//shopping list
+GET http://localhost:3315/api/affiche/shoppingList
+Content-Type: application/json
+
+###
+POST http://localhost:3315/api/shopping-list
+Content-Type: application/json
+
+{
+  "designation": "sardine",
+  "user_id": "15",
+  "type_id": "6",
+  "genre_id": "5",
+  "quantite": "1"
+}
+
+###
+POST http://localhost:3315/api/shopping-list/validate/2
+Content-Type: application/json
+
+###
+DELETE http://localhost:3315/api/delete/shoppingList/7
+Content-Type: application/json

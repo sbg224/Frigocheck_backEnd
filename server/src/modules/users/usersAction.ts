@@ -1,5 +1,6 @@
 import usersRepositorie from "./usersRepositorie";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { type thingsUsers, thingsProduct, thingsOrder } from "../../things";
 import type { RequestHandler } from "express";
 
@@ -125,4 +126,68 @@ const Destroy: RequestHandler = async (req, res) => {
 	}
 };
 
-export default { add, modif, Destroy };
+
+	const login: RequestHandler = async (req, res) => {
+		try {
+			const { email, password } = req.body;
+	
+			// Vérifier si l'utilisateur existe
+			const user = await usersRepositorie.findEmail(email);
+			if (!user || !(await bcrypt.compare(password, user.password))) {
+				res.status(400).json({ message: "Identifiant ou mot de passe invalide" });
+				return;
+			}
+	
+			// Vérifier si JWT_SECRET est défini
+			if (!process.env.JWT_SECRET) {
+				console.error("JWT_SECRET n'est pas défini dans .env !");
+				res.status(500).json({ message: "Erreur serveur, JWT_SECRET manquant" });
+				return;
+			}
+	
+			// Générer le token JWT
+			const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+				expiresIn: "1h",
+			});
+	
+			// Définir le cookie de manière sécurisée
+			res.cookie("authToken", token, {
+				httpOnly: true, // Empêche l'accès via JavaScript
+				secure: process.env.NODE_ENV === "production", // Active secure uniquement en production
+				sameSite: "strict", // Bloque l'envoi des cookies vers des sites tiers (CSRF)
+				maxAge: 3600000, // 1 heure en millisecondes
+			});
+	
+			// Créer un objet utilisateur sans le mot de passe
+			const { password: _, ...userWithoutPassword } = user;
+	
+			// Renvoyer les informations de l'utilisateur et le token
+			res.status(200).json({ 
+				message: "Connexion réussie !",
+				user: userWithoutPassword,
+				token: token // Inclure le token dans la réponse pour le frontend
+			});
+		} catch (error) {
+			console.error("Erreur lors de la connexion:", error);
+			res.status(500).json({ message: "Erreur serveur" });
+		}
+	};
+
+const logout:RequestHandler = async (req, res) => {
+  try {
+    // Supprimer le cookie
+    res.clearCookie("authToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    
+    res.status(200).json({ message: "Déconnexion réussie" });
+  } catch (error) {
+    console.error("Erreur lors de la déconnexion:", error);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+
+export default { add, modif, Destroy, login, logout};

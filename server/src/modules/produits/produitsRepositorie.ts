@@ -1,28 +1,26 @@
-import pool from "database/bdd";
+import {pool} from "database/bdd";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { thingsUsers, type thingsProduct, thingsOrder } from "../../things";
 
 class produitsRepositorie {
 
-  async findProduct(designation: string) {
-		//je verifie si l'utilisateur existe deja
+  async findProduct(designation: thingsProduct, user_id: number) {
+		//je verifie si le produit existe deja
 		try {
 			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-					"SELECT id, designation, user_id, type_id, genre_id, quantite FROM produit WHERE designation = ? LIMIT 1",
-					[designation],
+					"SELECT id, designation, user_id, type_id, genre_id, quantite FROM produit WHERE designation = ? AND user_id = ? LIMIT 1",
+					[designation, user_id],
 				);
-        console.log("Résultat de la recherche :", rows);
+			console.log("Résultat de la recherche :", rows);
 
 			if (rows.length > 0) {
-        return rows[0] as thingsProduct;
+				return rows[0] as thingsProduct;
 				// throw new Error("Un utilisateur avec cet email existe déjà.");
 			}
-      return null;
-		} catch (error) {
-
-    }
+			return null;
+		} catch (error) {}
 	}
 
 	// Ajout d'un produit
@@ -145,11 +143,11 @@ class produitsRepositorie {
 				.query<RowDataPacket[]>(
           "SELECT * FROM produit"
         );
-        console.log("Résultat :", rows);
-        if (rows.length > 0) {
-          return rows[0] as unknown as string;
-        }
-        return null;
+				console.log("Résultat :", rows);
+				if (rows.length > 0) {
+					return rows;  // Retourner le tableau complet
+				}
+				return null;
     } catch (error) {
       
     }

@@ -17,5 +17,7 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
+// Stocker la clé secrète du JWT
+const secret_key = process.env.JWT_SECRET || "default_secret"; // Valeur par défaut si non définie
 
-export default pool;
+export { secret_key, pool };

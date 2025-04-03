@@ -1,5 +1,6 @@
-import connection from "../database/bdd";
+// import connection from "../database/bdd";
 import router from "./routes";
+import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
 import { loger } from "./midelware/loger";
@@ -8,11 +9,14 @@ const app = express();
 
 app.use(loger);
 // Middleware pour CORS
-app.use(cors());
-
+app.use(cors({
+  origin: 'http://localhost:3000', // L'origine autorisée
+  credentials: true, // Permet l'envoi de cookies ou headers d'authentification
+}));
 // Middleware pour parser le corps des requêtes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Utiliser le routeur
 app.use(router);

@@ -1,29 +1,28 @@
-import pool from "database/bdd";
+import {pool} from "database/bdd";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { type thingsUsers, thingsProduct, thingsOrder } from "../../things";
 
 class usersRepositorie {
 	async findEmail(email: string) {
-		//je verifie si l'utilisateur existe deja
 		try {
 			const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-					"SELECT id, firstname, lastname, email, birth_day FROM `user` WHERE email = ? LIMIT 1",
-					[email],
+					"SELECT id, firstname, lastname, email, password, birth_day FROM `user` WHERE email = ? LIMIT 1",
+					[email]
 				);
-        console.log("Résultat de la recherche :", rows);
-
+	
+			console.log("Résultat de la recherche :", rows);
+	
 			if (rows.length > 0) {
-        return rows[0] as thingsUsers;
-				// throw new Error("Un utilisateur avec cet email existe déjà.");
+				return rows[0] as thingsUsers;
 			}
-      return null;
+			return null;
 		} catch (error) {
-
-    }
+			console.error("Erreur lors de la recherche de l'utilisateur:", error);
+			throw new Error("Erreur lors de la recherche de l'utilisateur.");
+		}
 	}
-
 	// Ajout d'un utilisateur
 	async create(user: thingsUsers): Promise<number> {
 		try {

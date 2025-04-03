@@ -22,16 +22,6 @@ const addProduit: RequestHandler = async (req, res) => {
 			return;
 		}
 
-		console.log("🔍 Vérification de l'existence de l'utilisateur...");
-		const userExit = await produitsRepositorie.findProduct(designation);
-		console.log("Résultat de findEmail :", userExit);
-		if (userExit) {
-			res
-				.status(409)
-				.json({ error: "Un produit avec cet designation existe déjà." });
-			return;
-		}
-
 		const produitInsert = await produitsRepositorie.create({
 			designation,
 			user_id,
@@ -166,7 +156,7 @@ const brows: RequestHandler = async (req, res, next) => {
 			return;
 		}
 
-		res.status(200).json({ message: getAll });
+		res.status(200).json({ data: getAll });
 	} catch (error) {
 		next(error);
 	}
