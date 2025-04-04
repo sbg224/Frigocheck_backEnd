@@ -24,15 +24,15 @@ class usersRepositorie {
 		}
 	}
 	// Ajout d'un utilisateur
-	async create(user: thingsUsers): Promise<number> {
+	async create(Credentia: thingsUsers): Promise<number> {
 		try {
 			// Validation des entrées
 			if (
-				!user.firstname ||
-				!user.lastname ||
-				!user.email ||
-				!user.password ||
-				!user.birth_day
+				!Credentia.firstname ||
+				!Credentia.lastname ||
+				!Credentia.email ||
+				!Credentia.password ||
+				!Credentia.birth_day
 			) {
 				throw new Error("Tous les champs obligatoires doivent être remplis.");
 			}
@@ -43,11 +43,11 @@ class usersRepositorie {
 				.query<ResultSetHeader>(
 					"INSERT INTO `user` (firstname, lastname, email, password, birth_day) VALUES (?, ?, ?, ?, ?)",
 					[
-						user.firstname,
-						user.lastname,
-						user.email,
-						user.password,
-						user.birth_day,
+						Credentia.firstname,
+						Credentia.lastname,
+						Credentia.email,
+						Credentia.password,
+						Credentia.birth_day,
 					],
 				);
 
@@ -64,7 +64,22 @@ class usersRepositorie {
 		}
 	}
 
-	async read() {}
+	async read(id: string) {
+    try {
+      const [rows] = await pool
+				.promise()
+				.query<RowDataPacket[]>(
+          "SELECT firstname, lastname, email, birth_day FROM `user` WHERE id = ?",[id]
+        );
+        console.log("Résultat :", rows);
+        if (rows.length > 0) {
+          return rows[0] as unknown as string;
+        }
+        return null;
+    } catch (error) {
+      
+    }
+  }
 
 	async readAll() {}
 

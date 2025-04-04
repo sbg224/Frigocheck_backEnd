@@ -136,12 +136,12 @@ class produitsRepositorie {
     }
   }
 
-	async readAll() {
+	async readAll(id: string) {
     try {
       const [rows] = await pool
 				.promise()
 				.query<RowDataPacket[]>(
-          "SELECT * FROM produit"
+          "select produit.*, `user` .firstname, `user` .email from produit inner join `user` on produit.user_id = `user` .id where produit.user_id = ?", [id]
         );
 				console.log("Résultat :", rows);
 				if (rows.length > 0) {

@@ -148,8 +148,9 @@ const readProduit: RequestHandler = async (req, res, next) => {
 
 //recupérer tous les produit
 const brows: RequestHandler = async (req, res, next) => {
+	const id = req.params.id
 	try {
-		const getAll = await produitsRepositorie.readAll();
+		const getAll = await produitsRepositorie.readAll(id);
 
 		if (!getAll) {
 			res.status(404).json({ message: "produit non trouvé" });

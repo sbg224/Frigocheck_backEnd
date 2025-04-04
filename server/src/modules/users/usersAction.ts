@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { type thingsUsers, thingsProduct, thingsOrder } from "../../things";
 import type { RequestHandler } from "express";
 
-const add: RequestHandler = async (req, res) => {
+const register: RequestHandler = async (req, res) => {
 	try {
 		const { firstname, lastname, email, password, birth_day } = req.body;
 		console.info(req.body);
@@ -126,6 +126,22 @@ const Destroy: RequestHandler = async (req, res) => {
 	}
 };
 
+const readUser: RequestHandler = async (req, res, next) => {
+	const id = req.params.id;
+	try {
+		const getOne = await usersRepositorie.read(id);
+
+		if (!getOne) {
+			res.status(404).json({ message: "utilisateur non trouvé" });
+			return;
+		}
+
+		res.status(200).json({ data: getOne });
+	} catch (error) {
+		next(error);
+	}
+};
+
 
 	const login: RequestHandler = async (req, res) => {
 		try {
@@ -153,7 +169,7 @@ const Destroy: RequestHandler = async (req, res) => {
 			// Définir le cookie de manière sécurisée
 			res.cookie("authToken", token, {
 				httpOnly: true, // Empêche l'accès via JavaScript
-				secure: process.env.NODE_ENV === "production", // Active secure uniquement en production
+				secure: false, // Active secure uniquement en production
 				sameSite: "strict", // Bloque l'envoi des cookies vers des sites tiers (CSRF)
 				maxAge: 3600000, // 1 heure en millisecondes
 			});
@@ -190,4 +206,4 @@ const logout:RequestHandler = async (req, res) => {
 };
 
 
-export default { add, modif, Destroy, login, logout};
+export default { register, modif, Destroy, login, logout, readUser};

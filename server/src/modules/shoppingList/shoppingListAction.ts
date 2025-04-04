@@ -97,8 +97,9 @@ const validateProduct: RequestHandler = async (req, res) => {
 };
 
 const browsShoppingL: RequestHandler = async (req, res, next) => {
+  const id = req.params.id
 	try {
-		const getAll = await shoppingListRepositorie.readAll();
+		const getAll = await shoppingListRepositorie.readAll(id);
 
 		if (!getAll) {
 			res.status(404).json({ message: "produit non trouvé" });

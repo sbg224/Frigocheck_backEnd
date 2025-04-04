@@ -1,4 +1,5 @@
 import express from "express";
+import {authenticateUser } from "../src/midelware/authMiddleware";
 
 const router = express.Router();
 
@@ -6,11 +7,13 @@ const router = express.Router();
 import usersAction from './modules/users/usersAction';
 
 //creation d'un user
-router.post("/api/user", usersAction.add);
+router.post("/api/user", usersAction.register);
+//récuperezr un user
+router.get("/api/user/profile/:id", usersAction.readUser)
 //modifier les données de l'user
-router.put("/api/user/update/:id", usersAction.modif);
+router.put("/api/user/update/:id", authenticateUser, usersAction.modif);
 //suppression d'un utilisateur
-router.delete("/api/user/delete/:id" , usersAction.Destroy)
+router.delete("/api/user/delete/:id", authenticateUser , usersAction.Destroy)
 
 
 
@@ -19,15 +22,15 @@ import produitsAction from "./modules/produits/produitsAction";
 // Définir des routes pour les produit
 
 //ajouter un nouveau produit
-router.post("/api/ajout/produit", produitsAction.addProduit)
+router.post("/api/ajout/produit", authenticateUser , produitsAction.addProduit)
 //modifier un produit
-router.put("/api/modifi/produit/:id", produitsAction.modifProduit)
+router.put("/api/modifi/produit/:id", authenticateUser , produitsAction.modifProduit)
 //supprimier un produit
-router.delete("/api/supprime/produit/:id", produitsAction.suppProduit)
+router.delete("/api/supprime/produit/:id", authenticateUser , produitsAction.suppProduit)
 //recupérer un produit
 router.get("/api/produit/:id", produitsAction.readProduit)
 //recupérer tous les produits
-router.get("/api/produits", produitsAction.brows)
+router.get("/api/produits/:id", produitsAction.brows)
 //recupérer tous les types et genres
 router.get("/api/typegenre", produitsAction.readType)
 
@@ -35,13 +38,13 @@ router.get("/api/typegenre", produitsAction.readType)
 //importation pour les routes
 import shoppingListAction from "./modules/shoppingList/shoppingListAction";
 //ajouter un nouveau shoppingList
-router.post("/api/shopping-list", shoppingListAction.addToShoppingList);
+router.post("/api/shopping-list", authenticateUser , shoppingListAction.addToShoppingList);
 //valider le produit pour l'ajouter dans le stock
-router.post("/api/shopping-list/validate/:id", shoppingListAction.validateProduct)
+router.post("/api/shopping-list/validate/:id", authenticateUser , shoppingListAction.validateProduct)
 //recupérer les produit
-router.get("/api/affiche/shoppingList", shoppingListAction.browsShoppingL)
+router.get("/api/affiche/shoppingList/:id", shoppingListAction.browsShoppingL)
 //supprimer un produit de la list 
-router.delete("/api/delete/shoppingList/:id", shoppingListAction.suppShoppinList)
+router.delete("/api/delete/shoppingList/:id", authenticateUser , shoppingListAction.suppShoppinList)
 
 
 
@@ -49,6 +52,7 @@ router.delete("/api/delete/shoppingList/:id", shoppingListAction.suppShoppinList
 //login user
 router.post("/api/user/login", usersAction.login)
 router.post("/api/user/logout", usersAction.logout)
+
 
 
 export default router;

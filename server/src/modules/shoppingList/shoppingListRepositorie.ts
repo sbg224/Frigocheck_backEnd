@@ -94,11 +94,11 @@ class ShoppingListRepository {
 		}
 	}
 
-	async readAll() {
+	async readAll(id:string) {
 		try {
 			const [rows] = await pool
 				.promise()
-				.query<RowDataPacket[]>("SELECT * FROM shopping_list");
+				.query<RowDataPacket[]>("SELECT sl.*, `user`.firstname, `user`.email FROM shopping_list AS sl INNER JOIN `user` ON sl.user_id = `user`.id WHERE sl.user_id = 17", [id]);
 			console.log("Résultat :", rows);
 			if (rows.length > 0) {
 				return rows; // Retourner le tableau complet

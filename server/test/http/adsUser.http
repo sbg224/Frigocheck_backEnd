@@ -10,6 +10,10 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:3315/api/user/profile/17
+Content-Type: application/json
+
+###
 PUT http://localhost:3315/api/user/update/4
 Content-Type: application/json
 
