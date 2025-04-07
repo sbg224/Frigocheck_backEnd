@@ -98,18 +98,14 @@ const validateProduct: RequestHandler = async (req, res) => {
 
 const browsShoppingL: RequestHandler = async (req, res, next) => {
   const id = req.params.id
-	try {
-		const getAll = await shoppingListRepositorie.readAll(id);
+  try {
+    const getAll = await shoppingListRepositorie.readAll(id);
 
-		if (!getAll) {
-			res.status(404).json({ message: "produit non trouvé" });
-			return;
-		}
-
-		res.status(200).json({ data: getAll });
-	} catch (error) {
-		next(error);
-	}
+    // Renvoyer une liste vide au lieu d'une erreur 404
+    res.status(200).json({ data: getAll || [] });
+  } catch (error) {
+    next(error);
+  }
 };
 
 //supprimer un produit

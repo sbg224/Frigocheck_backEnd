@@ -157,7 +157,7 @@ const brows: RequestHandler = async (req, res, next) => {
 			return;
 		}
 
-		res.status(200).json({ data: getAll });
+		res.status(200).json({ data: getAll || [] });
 	} catch (error) {
 		next(error);
 	}

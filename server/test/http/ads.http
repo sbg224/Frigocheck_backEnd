@@ -12,13 +12,13 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3315/api/produits/17
+GET http://localhost:3315/api/produits/20
 
 ###
 GET http://localhost:3315/api/produit/24
 
 ###
-PUT http://localhost:3315/api/modifi/produit/26
+PUT http://localhost:3315/api/modifi/produit/3
 Content-Type: application/json
 
 {
@@ -41,7 +41,7 @@ GET http://localhost:3315/api/typegenre
 
 
 //shopping list
-GET http://localhost:3315/api/affiche/shoppingList/17
+GET http://localhost:3315/api/affiche/shoppingList/20
 Content-Type: application/json
 
 ###
@@ -57,9 +57,17 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3315/api/shopping-list/validate/2
+POST http://localhost:3315/api/shopping-list/validate/31
 Content-Type: application/json
 
 ###
 DELETE http://localhost:3315/api/delete/shoppingList/7
 Content-Type: application/json
+
+
+//scraping
+###
+GET http://localhost:3315/api/scrap/carrefour
+
+###
+GET http://localhost:3315/api/promos/carrefour

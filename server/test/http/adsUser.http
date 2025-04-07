@@ -14,15 +14,15 @@ GET http://localhost:3315/api/user/profile/17
 Content-Type: application/json
 
 ###
-PUT http://localhost:3315/api/user/update/4
+PUT http://localhost:3315/api/user/update/18
 Content-Type: application/json
 
 {
-  "firstname": "Sow",
-  "lastname": "Aliou",
-  "email": "aliou@example.com",
-  "password": "mypassword797",
-  "birth_day": "2006-08-11"
+  "firstname": "",
+  "lastname": "",
+  "email": "salem3@gmail.com.com",
+  "password": "",
+  "birth_day": ""
 }
 
 ###
