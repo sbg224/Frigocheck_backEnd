@@ -10,7 +10,7 @@ const app = express();
 app.use(loger);
 // Middleware pour CORS
 app.use(cors({
-  origin: 'http://localhost:3000', // L'origine autorisée
+  origin: ['http://localhost:3000', 'http://localhost:8081'], // L'origine autorisée
   credentials: true, // Permet l'envoi de cookies ou headers d'authentification
 }));
 // Middleware pour parser le corps des requêtes

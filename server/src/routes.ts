@@ -68,13 +68,19 @@ router.delete(
 	shoppingListAction.suppShoppinList,
 );
 
-//scraping 
-import scrapCarrefourAction from "./modules/scraoing/scrapCarrefourAction";
+//scraping
+import scrapCarrefourAction from "./modules/scraoing/carrefour/scrapCarrefourAction";
 
 //scrapCarrefour
-router.get("/api/scrap/carrefour", scrapCarrefourAction.scrapAndSaveCarrefour)
+router.get("/api/scrap/carrefour", scrapCarrefourAction.scrapAndSaveCarrefour);
 //recupération des données pour le front
-router.get("/api/promos/carrefour", scrapCarrefourAction.brows)
+router.get("/api/promos/carrefour", scrapCarrefourAction.brows);
+
+import scrapAuchanAction from "./modules/scraoing/auchan/scrapAuchanAction";
+//scrapAuchan
+router.get("/api/scrap/Auchan", scrapAuchanAction.scrapAndSaveAuchan);
+//recupération des données pour le front
+router.get("/api/promos/Auchan", scrapAuchanAction.brows);
 
 
 export default router;

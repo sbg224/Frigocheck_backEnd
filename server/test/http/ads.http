@@ -1,4 +1,4 @@
-//produit
+
 ###
 POST http://localhost:3315/api/ajout/produit
 Content-Type: application/json
@@ -65,9 +65,16 @@ DELETE http://localhost:3315/api/delete/shoppingList/7
 Content-Type: application/json
 
 
-//scraping
+//scraping carrefour
 ###
 GET http://localhost:3315/api/scrap/carrefour
+
+###
+GET http://localhost:3315/api/promos/carrefour
+
+//scraping Auchan
+###
+GET http://localhost:3315/api/scrap/
 
 ###
 GET http://localhost:3315/api/promos/carrefour
